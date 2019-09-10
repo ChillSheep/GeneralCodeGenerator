@@ -22,11 +22,9 @@ long long int nr_of_codes;
 unsigned int codes_length;
 unsigned int x_for_minus;
 unsigned short formattype;
-char actualformat[1];
-short is;
-    if(exists("settings")) { //if the settings file exists you can try to load it
-        cout<<"Press 1 to load your settings from last time"<<endl;
-        cin>>is; }
+short is=0;
+    if(exists("settings")) //if the settings file exists you can try to load it
+        cout<<"Press 1 to load your settings from last time"<<endl,cin>>is;
         if (is==1) {
             ifstream saves("settings");
             saves>>codes_length;
@@ -34,9 +32,9 @@ short is;
             saves>>nr_of_codes;
             saves>>x_for_minus;
             saves>>formattype;
-            if (formattype==1) {
+            if (formattype==1)
             saves>>actualformat;
-            } }
+            }
     else {
         start:
     cout<<"How many characters should the codes have?"<<endl;
@@ -44,14 +42,13 @@ short is;
     if(codes_length<=0) {
         cout<<"The length should be greater than 0."<<endl;
         goto start; }
-
+    char actualformat[codes_length];
         nrofcodes:
     cout<<"How many codes to generate?"<<endl;
     cin>>nr_of_codes;
     if(nr_of_codes<=0) {
         cout<<"The number of codes should be greater than 0."<<endl;
         goto nrofcodes; }
-
         xforminus:
     cout<<"Do you want to have a '-' after every x characters?"<<endl;
     cout<<"Type 0 for no or any number for x="<<endl;
@@ -68,21 +65,8 @@ short is;
     if (formattype!=0 && formattype!=1) { //we are testing if the format type is correct.
         cout<<"Type either 0 or 1";
         goto format; }
-    char actualformat[codes_length];
 
-//for (int test=0; test<codes_length; test++)
-//    actualformat[test]='N';
-
-        formattypee:
-    if (formattype==1) {
-            cout<<"Type L for big letter N for a number, s for small letter, l for any letter, A for any"<<endl;
-            gets(actualformat);
-            gets(actualformat); //for some reason it won't work with only 1 gets???
-            for(int a=0; a<codes_length; a++) //we are testing if the format is correct.
-                if (actualformat[a]!='L' & actualformat[a]!='N' & actualformat[a]!='s' & actualformat[a]!='l' & actualformat[a]!='A' ) {
-                    cout<<"You entered one or more wrong letters for the format or too little"<<endl;
-                    goto formattypee; }
-    } }
+    }
 
 unsigned short random_letter = rand() % 26;
 unsigned short random_number = rand() %10;
@@ -91,10 +75,20 @@ unsigned short random_all_letter = rand() % 52;
 unsigned short random_small_letter = rand() % 26;
 unsigned short random_all = rand() % 62;
 unsigned int iterations=0;
+char actualformat[codes_length];
+        formattypee:
+    if (formattype==1) {
+            cout<<"Type L for big letter N for a number, s for small letter, l for any letter, A for any"<<endl;
+            gets(actualformat);
+            gets(actualformat);
+            //for some reason it won't work with only 1 gets???
+            for(int a=0; a<codes_length; a++) //we are testing if the format is correct.
+                if (actualformat[a]!='L' & actualformat[a]!='N' & actualformat[a]!='s' & actualformat[a]!='l' & actualformat[a]!='A' ) {
+                    cout<<"You entered one or more wrong letters for the format or too little"<<endl;
+                    goto formattypee; } }
 for (int j=0; j<nr_of_codes; j++) {
     iterations=0;
     for (int character=0; character<codes_length; character++) {
-
         if (x_for_minus)
             if (iterations%x_for_minus==0 & iterations!=0)
                 fout<<'-';
@@ -108,6 +102,7 @@ for (int j=0; j<nr_of_codes; j++) {
                     random_letter = rand() % 26; } }
             else
             {
+
                     if (actualformat[character]=='l') {
                         fout<<allletters[random_all_letter];
                         random_all_letter = rand() % 52;
@@ -149,9 +144,12 @@ if (is!=1) {
         save<<nr_of_codes<<endl;
         save<<x_for_minus<<endl;
         save<<formattype<<endl;
-        if(formattype)
-            save<<actualformat<<endl;
+        if(formattype) {
+            for (int character=0; character<codes_length; character++)
+                save<<actualformat[character];
+        cout<<endl; }
         save.close(); } }
+
 cout<<"Press any key to exit the program."<<endl;
 getch();
 }
