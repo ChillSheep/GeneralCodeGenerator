@@ -1,4 +1,5 @@
 #include <iostream>
+#include <windows.h>
 #include <cstdlib>
 #include <ctime>
 #include <conio.h>
@@ -8,6 +9,7 @@ ofstream fout ("codes.txt");
 string author="github.com/ChillSheep";
 //Checks if a file exists
 int main() {
+SetConsoleTitle(author.c_str());
 srand(time(NULL));
 //do not use ios_base::sync_with_stdio(false), fout.tie(NULL);
 char all[]="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; //62
